@@ -49,35 +49,25 @@ class Anarchy(commands.Cog):
         await self._server.create_voice_channel(name, category=self._category)
 
     @commands.command()
-    async def remove_channel(self, ctx: Any, name: str):
+    async def remove_channel(self, ctx: Any, channel_ref: Union[int, str]):
         """Remove a channel.
 
         Args:
             ctx (Any) - (internal) The command context.
-            name (str) - The channel's name.
+            channel_ref (Union[int, str]) - The channel to remove.
         """
-        channel = discord.utils.get(self._server.channels, name=name)
+        if isinstance(channel_ref, int):
+            channel = self._client.get_channel(channel_ref)
+        else:
+            channel = discord.utils.get(self._category.channels, name=channel_ref)
         if channel is None:
             await ctx.send("channel not found")
             return
-        if len([channel for channel in self._server.channels if channel.name == name]) > 1:
+        if isinstance(channel_ref, str) and \
+                len([channel for channel in self._server.channels if channel.name == channel_ref]) > 1:
             await ctx.send("multiple channels found, please specify id")
             return
 
-        await channel.delete()
-
-    @commands.command()
-    async def remove_channel_by_id(self, ctx: Any, snowflake: int):
-        """Remove a channel by id.
-
-        Args:
-            ctx (Any) - (internal) The command context.
-            snowflake (int) - The channel's id.
-        """
-        if discord.utils.get(self._category.channels, id=snowflake) is None:
-            await ctx.send("channel not found")
-            return
-        channel = self._server.get_channel(snowflake)
         await channel.delete()
 
     @commands.command()
