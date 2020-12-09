@@ -33,17 +33,27 @@ class Anarchy(commands.Cog):
         """Create a text channel.
 
         Args:
-            ctx (Any) - The command context.
+            ctx (Any) - (internal) The command context.
             name (str) - The channel's name.
         """
         await self._server.create_text_channel(name, category=self._category)
 
     @commands.command()
-    async def remove_text_channel(self, ctx: Any, name: str):
-        """Remove a text channel.
+    async def add_voice_channel(self, ctx: Any, name: str):
+        """Create a voice channel.
 
         Args:
-            ctx (Any) - The command context.
+            ctx (Any) - (internal) The command context.
+            name (str) - The channel's name.
+        """
+        await self._server.create_voice_channel(name, category=self._category)
+
+    @commands.command()
+    async def remove_channel(self, ctx: Any, name: str):
+        """Remove a channel.
+
+        Args:
+            ctx (Any) - (internal) The command context.
             name (str) - The channel's name.
         """
         channel = discord.utils.get(self._server.channels, name=name)
@@ -57,11 +67,11 @@ class Anarchy(commands.Cog):
         await channel.delete()
 
     @commands.command()
-    async def remove_text_channel_by_id(self, ctx: Any, snowflake: int):
-        """Remove a text channel by id.
+    async def remove_channel_by_id(self, ctx: Any, snowflake: int):
+        """Remove a channel by id.
 
         Args:
-            ctx (Any) - The command context.
+            ctx (Any) - (internal) The command context.
             snowflake (int) - The channel's id.
         """
         if discord.utils.get(self._category.channels, id=snowflake) is None:
