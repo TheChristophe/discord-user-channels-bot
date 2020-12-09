@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import discord
 from discord import Client
@@ -36,10 +36,6 @@ class Anarchy(commands.Cog):
             ctx (Any) - The command context.
             name (str) - The channel's name.
         """
-        channel = discord.utils.get(self._server.channels, name=name)
-        if channel is not None:
-            await ctx.send("channel already exists")
-            return
         await self._server.create_text_channel(name, category=self._category)
 
     @commands.command()
@@ -54,13 +50,25 @@ class Anarchy(commands.Cog):
         if channel is None:
             await ctx.send("channel not found")
             return
-        # if len([channel for channel in self._server.channels if channel.name == name]) > 1:
-        #     # TODO: special input (channel id?)
-        #     await ctx.send("multiple channels found, please specify id")
-        if channel is not None:
-            await channel.delete()
-        else:
-            ctx.send("could not delete channel")
+        if len([channel for channel in self._server.channels if channel.name == name]) > 1:
+            await ctx.send("multiple channels found, please specify id")
+            return
+
+        await channel.delete()
+
+    @commands.command()
+    async def remove_text_channel_by_id(self, ctx: Any, snowflake: int):
+        """Remove a text channel by id.
+
+        Args:
+            ctx (Any) - The command context.
+            snowflake (int) - The channel's id.
+        """
+        if discord.utils.get(self._category.channels, id=snowflake) is None:
+            await ctx.send("channel not found")
+            return
+        channel = self._server.get_channel(snowflake)
+        await channel.delete()
 
 
 def setup(bot):
