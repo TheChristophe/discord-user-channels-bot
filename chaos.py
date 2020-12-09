@@ -37,6 +37,7 @@ class Anarchy(commands.Cog):
             name (str) - The channel's name.
         """
         await self._server.create_text_channel(name, category=self._category)
+        await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def add_voice_channel(self, ctx: Any, name: str):
@@ -47,6 +48,7 @@ class Anarchy(commands.Cog):
             name (str) - The channel's name.
         """
         await self._server.create_voice_channel(name, category=self._category)
+        await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def remove_channel(self, ctx: Any, channel_ref: Union[int, str]):
@@ -74,6 +76,7 @@ class Anarchy(commands.Cog):
             return
 
         await channel.delete()
+        await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def set_channel_name(self, ctx: Any, channel_ref: Union[int, str], name: str):
@@ -92,6 +95,7 @@ class Anarchy(commands.Cog):
             await ctx.send("channel not found")
             return
         await channel.edit(name=name)
+        await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def set_channel_description(self, ctx: Any, channel_ref: Union[int, str], description: str):
@@ -113,6 +117,7 @@ class Anarchy(commands.Cog):
             await ctx.send("cannot set description on this type of channel")
             return
         await channel.edit(topic=description)
+        await ctx.message.add_reaction("✅")
 
 
 def setup(bot):
