@@ -80,6 +80,45 @@ class Anarchy(commands.Cog):
         channel = self._server.get_channel(snowflake)
         await channel.delete()
 
+    @commands.command()
+    async def set_channel_name(self, ctx: Any, channel_ref: Union[int, str], name: str):
+        """Set a new channel name.
+
+        Args:
+            ctx (Any) - (internal) The command context.
+            channel_ref (Union[int, str]) - The channel to set the description of.
+            name (str) - The new channel name.
+        """
+        if isinstance(channel_ref, int):
+            channel = self._client.get_channel(channel_ref)
+        else:
+            channel = discord.utils.get(self._category.channels, name=channel_ref)
+        if channel is None:
+            await ctx.send("channel not found")
+            return
+        await channel.edit(name=name)
+
+    @commands.command()
+    async def set_channel_description(self, ctx: Any, channel_ref: Union[int, str], description: str):
+        """Give a channel a new description.
+
+        Args:
+            ctx (Any) - (internal) The command context.
+            channel_ref (Union[int, str]) - The channel to set the description of.
+            description (str) - The new channel description.
+        """
+        if isinstance(channel_ref, int):
+            channel = self._client.get_channel(channel_ref)
+        else:
+            channel = discord.utils.get(self._category.channels, name=channel_ref)
+        if channel is None:
+            await ctx.send("channel not found")
+            return
+        if not isinstance(channel, discord.TextChannel):
+            await ctx.send("cannot set description on this type of channel")
+            return
+        await channel.edit(topic=description)
+
 
 def setup(bot):
     """Load the anarchy extension.
