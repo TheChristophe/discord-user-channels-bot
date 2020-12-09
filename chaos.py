@@ -65,7 +65,12 @@ class Anarchy(commands.Cog):
             return
         if isinstance(channel_ref, str) and \
                 len([channel for channel in self._server.channels if channel.name == channel_ref]) > 1:
-            await ctx.send("multiple channels found, please specify id")
+            await ctx.send("multiple channels with that name found, please specify id")
+            return
+
+        if channel.category_id != self._category.id:
+            # sanity check
+            await ctx.send("this channel is not deletable")
             return
 
         await channel.delete()
