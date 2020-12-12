@@ -14,10 +14,12 @@ class Anarchy(commands.Cog):
         self._server_id = config["server_id"]
         self._commands_channel = config["server_id"]
         self._category_id = config["anarchy_category_id"]
+        self._log_channel_id = config["anarchy_logging_id"]
 
         self._server: Optional[discord.Guild] = None
         self._channel: Optional[discord.TextChannel] = None
         self._category: Optional[discord.CategoryChannel] = None
+        self._logging: Optional[discord.TextChannel] = None
 
     class MoreThanOne(Exception):
         pass
@@ -54,6 +56,18 @@ class Anarchy(commands.Cog):
         self._server = self._client.get_guild(self._server_id)
         self._channel = self._server.get_channel(self._commands_channel)
         self._category = self._server.get_channel(self._category_id)
+        if self._log_channel_id is not None:
+            self._logging = self._server.get_channel(self._log_channel_id)
+
+    async def _log(self, whence, who: str, what: str, how: str):
+        if self._logging is None:
+            return
+        where = "DMs" if isinstance(whence, discord.DMChannel) else '#' + whence.name
+        embed = discord.Embed(title="Anarchy")
+        embed.set_footer(text="Through " + where)
+        embed.add_field(name=what, value=how)
+        embed.add_field(name="Responsible", value=who)
+        await self._logging.send(embed=embed)
 
     @commands.command()
     async def add_text_channel(self, ctx: Any, name: str):
@@ -66,6 +80,8 @@ class Anarchy(commands.Cog):
         await self._server.create_text_channel(name, category=self._category)
         await ctx.message.add_reaction("✅")
 
+        await self._log(ctx.message.channel, ctx.message.author, "Channel created", name)
+
     @commands.command()
     async def add_voice_channel(self, ctx: Any, name: str):
         """Create a voice channel.
@@ -76,6 +92,8 @@ class Anarchy(commands.Cog):
         """
         await self._server.create_voice_channel(name, category=self._category)
         await ctx.message.add_reaction("✅")
+
+        await self._log(ctx.message.channel, ctx.message.author, "Channel created", name)
 
     @commands.command()
     async def remove_channel(self, ctx: Any, channel_ref: Union[int, str]):
@@ -99,8 +117,12 @@ class Anarchy(commands.Cog):
             await ctx.send("this channel is not deletable")
             return
 
+        channel_name: str = channel.name
+
         await channel.delete()
         await ctx.message.add_reaction("✅")
+
+        await self._log(ctx.message.channel, ctx.message.author, "Channel removed", channel_name)
 
     @commands.command()
     async def set_channel_name(self, ctx: Any, channel_ref: Union[int, str], name: str):
@@ -120,8 +142,12 @@ class Anarchy(commands.Cog):
             await ctx.send("multiple channels with that name found, please specify id")
             return
 
+        old_name: str = channel.name
+
         await channel.edit(name=name)
         await ctx.message.add_reaction("✅")
+
+        await self._log(ctx.message.channel, ctx.message.author, "Channel renamed", old_name + " => " + name)
 
     @commands.command()
     async def set_channel_description(self, ctx: Any, channel_ref: Union[int, str], description: str):
@@ -144,8 +170,14 @@ class Anarchy(commands.Cog):
         if not isinstance(channel, discord.TextChannel):
             await ctx.send("cannot set description on this type of channel")
             return
+
+        old_description: str = channel.topic if channel.topic is not None else "[nothing]"
+
         await channel.edit(topic=description)
         await ctx.message.add_reaction("✅")
+
+        await self._log(ctx.message.channel, ctx.message.author, "Channel description changed",
+                        old_description + " => " + description)
 
     @commands.command()
     async def toggle_nsfw(self, ctx: Any, channel_ref: Union[int, str]):
@@ -160,6 +192,9 @@ class Anarchy(commands.Cog):
 
         await channel.edit(nsfw=not channel.nsfw)
         await ctx.message.add_reaction("✅")
+
+        await self._log(ctx.message.channel, ctx.message.author, "NSFW toggled",
+                        channel.nsfw)
 
 
 def setup(bot):

@@ -24,7 +24,11 @@ def parse_config_from_env() -> dict:
         "command_prefix": environ["DISCORD_COMMAND_PREFIX"],
         "command_channel_id": int(environ["DISCORD_COMMAND_CHANNEL"]),
         "token": environ["DISCORD_TOKEN"],
-        "anarchy_category_id": int(environ["DISCORD_ANARCHY_CATEGORY"])
+        "anarchy_category_id": int(environ["DISCORD_ANARCHY_CATEGORY"]),
+        "anarchy_logging_id":
+            int(environ["DISCORD_LOGGING_CHANNEL"])
+            if "DISCORD_LOGGING_CHANNEL" in environ and len(environ["DISCORD_LOGGING_CHANNEL"]) > 0
+            else None
     }
 
 
