@@ -147,6 +147,20 @@ class Anarchy(commands.Cog):
         await channel.edit(topic=description)
         await ctx.message.add_reaction("✅")
 
+    @commands.command()
+    async def toggle_nsfw(self, ctx: Any, channel_ref: Union[int, str]):
+        try:
+            channel = self._get_channel(channel_ref)
+            if channel is None:
+                await ctx.send("channel not found")
+                return
+        except Anarchy.MoreThanOne:
+            await ctx.send("multiple channels with that name found, please specify id")
+            return
+
+        await channel.edit(nsfw=not channel.nsfw)
+        await ctx.message.add_reaction("✅")
+
 
 def setup(bot):
     """Load the anarchy extension.
