@@ -19,6 +19,33 @@ class Anarchy(commands.Cog):
         self._channel: Optional[discord.TextChannel] = None
         self._category: Optional[discord.CategoryChannel] = None
 
+    class MoreThanOne(Exception):
+        pass
+
+    def _get_channel(self, channel_ref: Union[int, str]) -> Optional[Union[discord.TextChannel, discord.VoiceChannel]]:
+        """Helper to fetch channels.
+
+        Args:
+            channel_ref (Union[int, str]) - A reference to the channel; may be a channel id/snowflake or channel name.
+        Returns:
+            Optional[Union[discord.TextChannel, discord.VoiceChannel]] - The channel, if any was found.
+        """
+        # if snowflake/ID
+        if isinstance(channel_ref, int):
+            channel = self._client.get_channel(channel_ref)
+        # by name
+        elif isinstance(channel_ref, str):
+            channel = discord.utils.get(self._category.channels, name=channel_ref)
+        else:
+            raise ValueError("unknown channel reference type")
+        # not found
+        if channel is None:
+            return None
+        if isinstance(channel_ref, str) and \
+                len([channel for channel in self._category.channels if channel.name == channel_ref]) > 1:
+            raise Anarchy.MoreThanOne()
+        return channel
+
     @commands.Cog.listener("on_ready")
     async def on_ready(self):
         """Set up internal references."""
@@ -58,15 +85,12 @@ class Anarchy(commands.Cog):
             ctx (Any) - (internal) The command context.
             channel_ref (Union[int, str]) - The channel to remove.
         """
-        if isinstance(channel_ref, int):
-            channel = self._client.get_channel(channel_ref)
-        else:
-            channel = discord.utils.get(self._category.channels, name=channel_ref)
-        if channel is None:
-            await ctx.send("channel not found")
-            return
-        if isinstance(channel_ref, str) and \
-                len([channel for channel in self._server.channels if channel.name == channel_ref]) > 1:
+        try:
+            channel = self._get_channel(channel_ref)
+            if channel is None:
+                await ctx.send("channel not found")
+                return
+        except Anarchy.MoreThanOne:
             await ctx.send("multiple channels with that name found, please specify id")
             return
 
@@ -87,13 +111,15 @@ class Anarchy(commands.Cog):
             channel_ref (Union[int, str]) - The channel to set the description of.
             name (str) - The new channel name.
         """
-        if isinstance(channel_ref, int):
-            channel = self._client.get_channel(channel_ref)
-        else:
-            channel = discord.utils.get(self._category.channels, name=channel_ref)
-        if channel is None:
-            await ctx.send("channel not found")
+        try:
+            channel = self._get_channel(channel_ref)
+            if channel is None:
+                await ctx.send("channel not found")
+                return
+        except Anarchy.MoreThanOne:
+            await ctx.send("multiple channels with that name found, please specify id")
             return
+
         await channel.edit(name=name)
         await ctx.message.add_reaction("✅")
 
@@ -106,13 +132,15 @@ class Anarchy(commands.Cog):
             channel_ref (Union[int, str]) - The channel to set the description of.
             description (str) - The new channel description.
         """
-        if isinstance(channel_ref, int):
-            channel = self._client.get_channel(channel_ref)
-        else:
-            channel = discord.utils.get(self._category.channels, name=channel_ref)
-        if channel is None:
-            await ctx.send("channel not found")
+        try:
+            channel = self._get_channel(channel_ref)
+            if channel is None:
+                await ctx.send("channel not found")
+                return
+        except Anarchy.MoreThanOne:
+            await ctx.send("multiple channels with that name found, please specify id")
             return
+
         if not isinstance(channel, discord.TextChannel):
             await ctx.send("cannot set description on this type of channel")
             return
