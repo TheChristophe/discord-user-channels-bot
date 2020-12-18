@@ -77,7 +77,13 @@ class Anarchy(commands.Cog):
             ctx (Any) - (internal) The command context.
             name (str) - The channel's name.
         """
-        await self._server.create_text_channel(name, category=self._category)
+        position = 0
+        for channel in self._category.channels:
+            if name < channel.name:
+                position = channel.position - 1
+                break
+
+        await self._server.create_text_channel(name, category=self._category, position=position)
         await ctx.message.add_reaction("✅")
 
         await self._log(ctx.message.channel, ctx.message.author, "Channel created", name)
