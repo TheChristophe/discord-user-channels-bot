@@ -86,10 +86,18 @@ class Anarchy(commands.Cog):
                 position = channel.position - 1
                 break
 
-        await self._server.create_text_channel(name, category=self._category, position=position)
-        await ctx.message.add_reaction("✅")
+        try:
+            channel = await self._server.create_text_channel(name, category=self._category, position=position)
 
-        await self._log(ctx.message.channel, ctx.message.author, "Channel created", name)
+            if channel is not None:
+                await ctx.message.add_reaction("✅")
+                await self._log(ctx.message.channel, ctx.message.author, "Channel created: {}", channel.name)
+        except discord.Forbidden:
+            await ctx.message.send("Insufficient permissions")
+            return
+        except (discord.HTTPException, discord.InvalidArgument):
+            await ctx.message.add_reaction("❌")
+            return
 
     @commands.command()
     async def add_voice_channel(self, ctx: Any, name: str):
