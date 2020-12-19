@@ -24,11 +24,12 @@ class Anarchy(commands.Cog):
     class MoreThanOne(Exception):
         pass
 
-    def _get_channel(self, channel_ref: Union[int, str]) -> Optional[Union[discord.TextChannel, discord.VoiceChannel]]:
+    def _get_channel(self, channel_ref: Union[discord.TextChannel, int, str]) -> Optional[Union[discord.TextChannel, discord.VoiceChannel]]:
         """Helper to fetch channels.
 
         Args:
-            channel_ref (Union[int, str]) - A reference to the channel; may be a channel id/snowflake or channel name.
+            channel_ref (Union[discord.TextChannel, int, str]) - A reference to the channel; may be a channel
+            id/snowflake, channel name or a direct channel reference.
         Returns:
             Optional[Union[discord.TextChannel, discord.VoiceChannel]] - The channel, if any was found.
         """
@@ -38,6 +39,8 @@ class Anarchy(commands.Cog):
         # by name
         elif isinstance(channel_ref, str):
             channel = discord.utils.get(self._category.channels, name=channel_ref)
+        elif isinstance(channel_ref, discord.TextChannel):
+            return channel_ref
         else:
             raise ValueError("unknown channel reference type")
         # not found
@@ -102,7 +105,7 @@ class Anarchy(commands.Cog):
         await self._log(ctx.message.channel, ctx.message.author, "Channel created", name)
 
     @commands.command()
-    async def remove_channel(self, ctx: Any, channel_ref: Union[int, str]):
+    async def remove_channel(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str]):
         """Remove a channel.
 
         Args:
@@ -131,7 +134,7 @@ class Anarchy(commands.Cog):
         await self._log(ctx.message.channel, ctx.message.author, "Channel removed", channel_name)
 
     @commands.command()
-    async def set_channel_name(self, ctx: Any, channel_ref: Union[int, str], name: str):
+    async def set_channel_name(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str], name: str):
         """Set a new channel name.
 
         Args:
@@ -156,7 +159,7 @@ class Anarchy(commands.Cog):
         await self._log(ctx.message.channel, ctx.message.author, "Channel renamed", old_name + " => " + name)
 
     @commands.command()
-    async def set_channel_description(self, ctx: Any, channel_ref: Union[int, str], description: str):
+    async def set_channel_description(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str], description: str):
         """Give a channel a new description.
 
         Args:
@@ -186,7 +189,7 @@ class Anarchy(commands.Cog):
                         old_description + " => " + description)
 
     @commands.command()
-    async def toggle_nsfw(self, ctx: Any, channel_ref: Union[int, str]):
+    async def toggle_nsfw(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str]):
         try:
             channel = self._get_channel(channel_ref)
             if channel is None:
