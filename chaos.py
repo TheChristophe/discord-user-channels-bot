@@ -118,7 +118,7 @@ class Anarchy(commands.Cog):
 
         Args:
             ctx (Any) - (internal) The command context.
-            channel_ref (Union[int, str]) - The channel to remove.
+            channel_ref (Union[discord.TextChannel, int, str]) - The channel to remove.
         """
         try:
             channel = self._get_channel(channel_ref)
@@ -147,7 +147,7 @@ class Anarchy(commands.Cog):
 
         Args:
             ctx (Any) - (internal) The command context.
-            channel_ref (Union[int, str]) - The channel to set the description of.
+            channel_ref (Union[discord.TextChannel, int, str]) - The channel to set the description of.
             name (str) - The new channel name.
         """
         try:
@@ -172,7 +172,7 @@ class Anarchy(commands.Cog):
 
         Args:
             ctx (Any) - (internal) The command context.
-            channel_ref (Union[int, str]) - The channel to set the description of.
+            channel_ref (Union[discord.TextChannel, int, str]) - The channel to set the description of.
             description (str) - The new channel description.
         """
         try:
@@ -198,6 +198,12 @@ class Anarchy(commands.Cog):
 
     @commands.command()
     async def toggle_nsfw(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str]):
+        """Toggle NSFW mode on a channel.
+
+        Args:
+            ctx (Any) - (internal) The command context.
+            channel_ref (Union[discord.TextChannel, int, str]) - The channel to toggle NSFW mode on.
+        """
         try:
             channel = self._get_channel(channel_ref)
             if channel is None:
