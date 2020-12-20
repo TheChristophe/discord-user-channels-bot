@@ -14,12 +14,14 @@ class Anarchy(commands.Cog):
         self._server_id = config["server_id"]
         self._commands_channel = config["server_id"]
         self._category_id = config["anarchy_category_id"]
-        self._log_channel_id = config["anarchy_logging_id"]
+        self._full_log_id = config["anarchy_full_log_id"]
+        self._anon_log_id = config["anarchy_anon_log_id"]
 
         self._server: Optional[discord.Guild] = None
         self._channel: Optional[discord.TextChannel] = None
         self._category: Optional[discord.CategoryChannel] = None
-        self._logging: Optional[discord.TextChannel] = None
+        self._full_log: Optional[discord.TextChannel] = None
+        self._anon_log: Optional[discord.TextChannel] = None
 
     class MoreThanOne(Exception):
         pass
@@ -59,18 +61,21 @@ class Anarchy(commands.Cog):
         self._server = self._client.get_guild(self._server_id)
         self._channel = self._server.get_channel(self._commands_channel)
         self._category = self._server.get_channel(self._category_id)
-        if self._log_channel_id is not None:
-            self._logging = self._server.get_channel(self._log_channel_id)
+        if self._full_log_id is not None:
+            self._full_log = self._server.get_channel(self._full_log_id)
+        if self._anon_log_id is not None:
+            self._anon_log = self._server.get_channel(self._anon_log_id)
 
     async def _log(self, whence, who: str, what: str, how: str):
-        if self._logging is None:
-            return
         where = "DMs" if isinstance(whence, discord.DMChannel) else '#' + whence.name
         embed = discord.Embed(title="Anarchy")
         embed.set_footer(text="Through " + where)
         embed.add_field(name=what, value=how)
+        if self._anon_log is not None:
+            await self._anon_log.send(embed=embed)
         embed.add_field(name="Responsible", value=who)
-        await self._logging.send(embed=embed)
+        if self._full_log is not None:
+            await self._full_log.send(embed=embed)
 
     @commands.command()
     async def add_text_channel(self, ctx: Any, name: str):
@@ -91,7 +96,7 @@ class Anarchy(commands.Cog):
 
             if channel is not None:
                 await ctx.message.add_reaction("✅")
-                await self._log(ctx.message.channel, ctx.message.author, "Channel created: {}", channel.name)
+                await self._log(ctx.message.channel, ctx.message.author, "Channel created:", channel.name)
         except discord.Forbidden:
             await ctx.message.send("Insufficient permissions")
             return
