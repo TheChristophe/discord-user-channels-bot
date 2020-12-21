@@ -12,8 +12,6 @@ def parse_config_from_env() -> dict:
         raise ValueError("missing server id")
     if "DISCORD_COMMAND_PREFIX" not in environ or len(environ["DISCORD_COMMAND_PREFIX"]) == 0:
         raise ValueError("missing prefix")
-    if "DISCORD_COMMAND_CHANNEL" not in environ or len(environ["DISCORD_COMMAND_CHANNEL"]) == 0:
-        raise ValueError("missing command channel")
     if "DISCORD_TOKEN" not in environ or len(environ["DISCORD_TOKEN"]) == 0:
         raise ValueError("missing token")
     if "DISCORD_ANARCHY_CATEGORY" not in environ or len(environ["DISCORD_ANARCHY_CATEGORY"]) == 0:
@@ -22,7 +20,6 @@ def parse_config_from_env() -> dict:
     return {
         "server_id": int(environ["DISCORD_SERVER_ID"]),
         "command_prefix": environ["DISCORD_COMMAND_PREFIX"],
-        "command_channel_id": int(environ["DISCORD_COMMAND_CHANNEL"]),
         "token": environ["DISCORD_TOKEN"],
         "anarchy_category_id": int(environ["DISCORD_ANARCHY_CATEGORY"]),
         "anarchy_full_log_id":

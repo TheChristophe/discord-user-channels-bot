@@ -12,13 +12,11 @@ class Anarchy(commands.Cog):
         self._client: Client = client
 
         self._server_id = config["server_id"]
-        self._commands_channel = config["server_id"]
         self._category_id = config["anarchy_category_id"]
         self._full_log_id = config["anarchy_full_log_id"]
         self._anon_log_id = config["anarchy_anon_log_id"]
 
         self._server: Optional[discord.Guild] = None
-        self._channel: Optional[discord.TextChannel] = None
         self._category: Optional[discord.CategoryChannel] = None
         self._full_log: Optional[discord.TextChannel] = None
         self._anon_log: Optional[discord.TextChannel] = None
@@ -59,7 +57,6 @@ class Anarchy(commands.Cog):
         print('We have logged in as {0.user}'.format(self._client))
 
         self._server = self._client.get_guild(self._server_id)
-        self._channel = self._server.get_channel(self._commands_channel)
         self._category = self._server.get_channel(self._category_id)
         print("Server:", self._server.name, "Category:", self._category.name)
         if self._full_log_id is not None:
