@@ -69,10 +69,10 @@ class Anarchy(commands.Cog):
     async def _log(self, whence, who: str, what: str, how: str):
         where = "DMs" if isinstance(whence, discord.DMChannel) else '#' + whence.name
         embed = discord.Embed(title="Anarchy")
-        embed.set_footer(text="Through " + where)
         embed.add_field(name=what, value=how)
         if self._anon_log is not None:
             await self._anon_log.send(embed=embed)
+        embed.set_footer(text="Through " + where)
         embed.add_field(name="Responsible", value=who)
         if self._full_log is not None:
             await self._full_log.send(embed=embed)
