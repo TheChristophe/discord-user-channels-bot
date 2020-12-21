@@ -61,10 +61,14 @@ class Anarchy(commands.Cog):
         self._server = self._client.get_guild(self._server_id)
         self._channel = self._server.get_channel(self._commands_channel)
         self._category = self._server.get_channel(self._category_id)
+        print("Server:", self._server.name, "Category:", self._category.name)
         if self._full_log_id is not None:
             self._full_log = self._server.get_channel(self._full_log_id)
+            print("Full log:", self._full_log.name)
+
         if self._anon_log_id is not None:
             self._anon_log = self._server.get_channel(self._anon_log_id)
+            print("Anonymous log:", self._anon_log.name)
 
     async def _log(self, whence, who: str, what: str, how: str):
         where = "DMs" if isinstance(whence, discord.DMChannel) else '#' + whence.name
