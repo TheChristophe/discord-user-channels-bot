@@ -5,6 +5,22 @@ from discord import Client
 import discord.ext.commands as commands
 
 
+async def _add_checkmark(ctx: Any):
+    try:
+        await ctx.message.add_reaction("✅")
+    except discord.Forbidden:
+        await ctx.send("I lack the permissions to add reactions")
+        return
+    except discord.HTTPException:
+        # retry once
+        try:
+            await ctx.message.add_reaction("✅")
+        except discord.HTTPException:
+            await ctx.send("Success (but I could not add a ✅ reaction)")
+        finally:
+            return
+
+
 class Anarchy(commands.Cog):
     """Anarchy channel category where anyone may create, delete or edit channels."""
 
@@ -24,7 +40,8 @@ class Anarchy(commands.Cog):
     class MoreThanOne(Exception):
         pass
 
-    def _get_channel(self, channel_ref: Union[discord.TextChannel, int, str]) -> Optional[Union[discord.TextChannel, discord.VoiceChannel]]:
+    def _get_channel(self, channel_ref: Union[discord.TextChannel, int, str]) -> \
+            Optional[Union[discord.TextChannel, discord.VoiceChannel]]:
         """Helper to fetch channels.
 
         Args:
@@ -78,6 +95,38 @@ class Anarchy(commands.Cog):
         if self._full_log is not None:
             await self._full_log.send(embed=embed)
 
+    async def _add_channel(self, ctx: Any, name: str, channel_type: type):
+        position = None
+        if channel_type == discord.TextChannel:
+            position = 0
+            for channel in self._category.channels:
+                if name < channel.name:
+                    position = channel.position - 1
+                    break
+
+        try:
+            channel = None
+            if channel_type == discord.TextChannel:
+                channel = await self._server.create_text_channel(name, category=self._category, position=position)
+            elif channel_type == discord.VoiceChannel:
+                channel = await self._server.create_voice_channel(name, category=self._category, position=position)
+            else:
+                await ctx.send("Internal error")
+                return
+
+            if channel is not None:
+                await _add_checkmark(ctx)
+                await self._log(ctx.message.channel, ctx.message.author, "Channel created:", channel.name)
+            else:
+                await ctx.message.add_reaction("❌")
+                await self._log(ctx.message.channel, ctx.message.author, "Failed to create channel:", name)
+        except discord.Forbidden:
+            await ctx.message.send("I lack the permissions to create channels")
+            return
+        except (discord.HTTPException, discord.InvalidArgument):
+            await ctx.message.add_reaction("❌")
+            return
+
     @commands.command()
     async def add_text_channel(self, ctx: Any, name: str):
         """Create a text channel.
@@ -86,24 +135,7 @@ class Anarchy(commands.Cog):
             ctx (Any) - (internal) The command context.
             name (str) - The channel's name.
         """
-        position = 0
-        for channel in self._category.channels:
-            if name < channel.name:
-                position = channel.position - 1
-                break
-
-        try:
-            channel = await self._server.create_text_channel(name, category=self._category, position=position)
-
-            if channel is not None:
-                await ctx.message.add_reaction("✅")
-                await self._log(ctx.message.channel, ctx.message.author, "Channel created:", channel.name)
-        except discord.Forbidden:
-            await ctx.message.send("Insufficient permissions")
-            return
-        except (discord.HTTPException, discord.InvalidArgument):
-            await ctx.message.add_reaction("❌")
-            return
+        await self._add_channel(ctx, name, discord.TextChannel)
 
     @commands.command()
     async def add_voice_channel(self, ctx: Any, name: str):
@@ -113,10 +145,7 @@ class Anarchy(commands.Cog):
             ctx (Any) - (internal) The command context.
             name (str) - The channel's name.
         """
-        await self._server.create_voice_channel(name, category=self._category)
-        await ctx.message.add_reaction("✅")
-
-        await self._log(ctx.message.channel, ctx.message.author, "Channel created", name)
+        await self._add_channel(ctx, name, discord.VoiceChannel)
 
     @commands.command()
     async def remove_channel(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str]):
@@ -142,10 +171,19 @@ class Anarchy(commands.Cog):
 
         channel_name: str = channel.name
 
-        await channel.delete()
-        await ctx.message.add_reaction("✅")
-
-        await self._log(ctx.message.channel, ctx.message.author, "Channel removed", channel_name)
+        try:
+            await channel.delete()
+        except discord.Forbidden:
+            await ctx.send("I lack the permissions to delete channels")
+            return
+        except discord.HTTPException:
+            try:
+                await channel.delete()
+            except discord.HTTPException:
+                await ctx.send("❌")
+        else:
+            await _add_checkmark(ctx)
+            await self._log(ctx.message.channel, ctx.message.author, "Channel removed", channel_name)
 
     @commands.command()
     async def set_channel_name(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str], name: str):
@@ -173,7 +211,8 @@ class Anarchy(commands.Cog):
         await self._log(ctx.message.channel, ctx.message.author, "Channel renamed", old_name + " => " + name)
 
     @commands.command()
-    async def set_channel_description(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str], description: str):
+    async def set_channel_description(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str],
+                                      description: str):
         """Give a channel a new description.
 
         Args:
@@ -222,8 +261,7 @@ class Anarchy(commands.Cog):
         await channel.edit(nsfw=not channel.nsfw)
         await ctx.message.add_reaction("✅")
 
-        await self._log(ctx.message.channel, ctx.message.author, "NSFW toggled",
-                        channel.nsfw)
+        await self._log(ctx.message.channel, ctx.message.author, "NSFW toggled", channel.nsfw)
 
 
 def setup(bot):
