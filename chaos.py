@@ -85,6 +85,7 @@ class Anarchy(commands.Cog):
             print("Anonymous log:", self._anon_log.name)
 
     async def _log(self, whence, who: str, what: str, how: str):
+        print(who, "did \"", what, how, "\" from", whence)
         where = "DMs" if isinstance(whence, discord.DMChannel) else '#' + whence.name
         embed = discord.Embed(title="Anarchy")
         embed.add_field(name=what, value=how)
