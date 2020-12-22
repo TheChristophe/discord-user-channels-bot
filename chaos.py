@@ -206,10 +206,14 @@ class Anarchy(commands.Cog):
 
         old_name: str = channel.name
 
-        await channel.edit(name=name)
-        await ctx.message.add_reaction("✅")
-
-        await self._log(ctx.message.channel, ctx.message.author, "Channel renamed", old_name + " => " + name)
+        try:
+            await channel.edit(name=name)
+        except (discord.HTTPException, discord.Forbidden, discord.InvalidArgument):
+            await ctx.message.add_reaction("❌")
+            return
+        else:
+            await self._log(ctx.message.channel, ctx.message.author, "Channel renamed", old_name + " => " + name)
+            await _add_checkmark(ctx)
 
     @commands.command()
     async def set_channel_description(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str],
@@ -236,11 +240,15 @@ class Anarchy(commands.Cog):
 
         old_description: str = channel.topic if channel.topic is not None else "[nothing]"
 
-        await channel.edit(topic=description)
-        await ctx.message.add_reaction("✅")
-
-        await self._log(ctx.message.channel, ctx.message.author, "Channel description changed",
-                        old_description + " => " + description)
+        try:
+            await channel.edit(topic=description)
+        except (discord.HTTPException, discord.Forbidden, discord.InvalidArgument):
+            await ctx.message.add_reaction("❌")
+            return
+        else:
+            await self._log(ctx.message.channel, ctx.message.author, "Channel description changed",
+                            old_description + " => " + description)
+            await _add_checkmark(ctx)
 
     @commands.command()
     async def toggle_nsfw(self, ctx: Any, channel_ref: Union[discord.TextChannel, int, str]):
@@ -259,10 +267,14 @@ class Anarchy(commands.Cog):
             await ctx.send("multiple channels with that name found, please specify id")
             return
 
-        await channel.edit(nsfw=not channel.nsfw)
-        await ctx.message.add_reaction("✅")
-
-        await self._log(ctx.message.channel, ctx.message.author, "NSFW toggled", channel.nsfw)
+        try:
+            await channel.edit(nsfw=not channel.nsfw)
+        except (discord.HTTPException, discord.Forbidden, discord.InvalidArgument):
+            await ctx.message.add_reaction("❌")
+            return
+        else:
+            await self._log(ctx.message.channel, ctx.message.author, "NSFW toggled", channel.nsfw)
+            await _add_checkmark(ctx)
 
 
 def setup(bot):
