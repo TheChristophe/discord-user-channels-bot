@@ -293,6 +293,23 @@ class Anarchy(commands.Cog):
             return
         await message.pin()
 
+    @commands.command()
+    async def unpin(self, ctx: Any):
+        """Unpin a message. Reply to the message you want to unpin with this command."""
+        if ctx.message.channel.category is None or ctx.message.channel.category != self._category:
+            await ctx.message.channel.send("Wrong category")
+            return
+
+        response = ctx.message.reference
+        if response is None:
+            await ctx.message.channel.send("You're not replying to a message :(")
+            return
+        message = await ctx.fetch_message(response.message_id)
+        if message is None:
+            await ctx.message.channel.send("Could not load message being replied to.")
+            return
+        await message.unpin()
+
 
 def setup(bot):
     """Load the anarchy extension.
