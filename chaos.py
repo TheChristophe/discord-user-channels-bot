@@ -9,7 +9,7 @@ async def _add_checkmark(ctx: Any):
     try:
         await ctx.message.add_reaction("✅")
     except discord.Forbidden:
-        await ctx.send("I lack the permissions to add reactions")
+        await ctx.send("Success (but I could not add a ✅ reaction)")
         return
     except discord.HTTPException:
         # retry once
