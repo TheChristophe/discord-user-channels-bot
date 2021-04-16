@@ -4,6 +4,8 @@ import discord
 from discord import Client
 import discord.ext.commands as commands
 
+from random import randint
+
 
 async def _add_puke(message: discord.Message):
     try:
@@ -33,7 +35,7 @@ class JavaReact(commands.Cog):
         """Parse messages for the cursed word."""
         if message.channel.id in self._channel_ids or\
                 (message.channel.category is not None and message.channel.category.id in self._channel_ids):
-            if 'java' in message.content.lower():
+            if 'java' in message.content.lower() and randint(1, 10) == 10:
                 await _add_puke(message)
 
 
