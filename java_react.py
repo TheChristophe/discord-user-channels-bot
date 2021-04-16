@@ -33,7 +33,7 @@ class JavaReact(commands.Cog):
     @commands.Cog.listener("on_message")
     async def on_message(self, message):
         """Parse messages for the cursed word."""
-        if message.channel.id in self._channel_ids or\
+        if message.channel.id in self._channel_ids or isinstance(message.channel, discord.DMChannel) or\
                 (message.channel.category is not None and message.channel.category.id in self._channel_ids):
             if 'java' in message.content.lower() and randint(1, 10) == 10:
                 await _add_puke(message)
