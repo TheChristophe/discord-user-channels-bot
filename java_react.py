@@ -7,15 +7,15 @@ import discord.ext.commands as commands
 from random import randint
 
 
-async def _add_puke(message: discord.Message):
+async def _add_puke(message: discord.Message, emoji = "🤮"):
     try:
-        await message.add_reaction("🤮")
+        await message.add_reaction(emoji)
     except discord.Forbidden:
         return
     except discord.HTTPException:
         # retry once
         try:
-            await message.add_reaction("🤮")
+            await message.add_reaction(emoji)
         except discord.HTTPException:
             pass
         finally:
@@ -37,6 +37,10 @@ class JavaReact(commands.Cog):
                 (message.channel.category is not None and message.channel.category.id in self._channel_ids):
             if 'java' in message.content.lower() and randint(1, 10) == 10:
                 await _add_puke(message)
+        if 'os' in message.content.lower():
+            if 'pavel' in message.content.lower():
+                await _add_puke(message, "😡")
+                await _add_puke(message, "🤬")
 
 
 def setup(bot):
