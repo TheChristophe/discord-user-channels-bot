@@ -8,6 +8,8 @@ from discord.ext.commands import Bot
 from os import environ
 from dotenv import load_dotenv
 
+from database import load_engine
+
 
 def parse_config_from_env() -> dict:
     if "DISCORD_SERVER_ID" not in environ or len(environ["DISCORD_SERVER_ID"]) == 0:
@@ -66,9 +68,12 @@ def main():
 
     client.add_listener(on_command_error, "on_command_error")
 
+    load_engine()
+
     client._custom_config = config
     client.load_extension("chaos")
     client.load_extension("java_react")
+    client.load_extension("tags")
     client.run(config["token"])
 
 
