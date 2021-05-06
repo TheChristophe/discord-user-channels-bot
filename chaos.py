@@ -310,6 +310,14 @@ class Anarchy(commands.Cog):
             return
         await message.unpin()
 
+    @commands.command(aliases=['🔫'])
+    async def päng(self, ctx):
+        await ctx.message.channel.send("Pew pew pew!")
+
+    @commands.command()
+    async def xkcd(self, ctx, nr:int):
+        await ctx.message.channel.send("https://xkcd.com/{}/".format(nr))
+
 
 def setup(bot):
     """Load the anarchy extension.
@@ -319,3 +327,4 @@ def setup(bot):
     """
     anarchy: Anarchy = Anarchy(bot, bot._custom_config)
     bot.add_cog(anarchy)
+
