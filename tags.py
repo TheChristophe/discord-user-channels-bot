@@ -7,9 +7,9 @@ from database import Tag, session, engine, DBSession
 from sqlalchemy.orm import Session
 
 
-def is_owner():
+def is_mod():
     async def predicate(ctx):
-        return ctx.author.id == 147399559247691776
+        return ctx.guild.get_role(510218732698599445) in ctx.author.roles
     return commands.check(predicate)
 
 
@@ -31,7 +31,7 @@ class Tags(commands.Cog):
         await ctx.send(q.contents)
 
     @commands.command()
-    @is_owner()
+    @is_mod()
     async def set_tag(self, ctx: Any, name: str, *content: Union[str, Emoji]):
         try:
             with DBSession():
@@ -53,7 +53,7 @@ class Tags(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @is_owner()
+    @is_mod()
     async def del_tag(self, ctx: Any, name: str):
         try:
             with DBSession():
