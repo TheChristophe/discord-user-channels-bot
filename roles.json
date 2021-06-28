@@ -1,0 +1,141 @@
+[
+  {
+    "topic": "Studiengang",
+    "ref": "studien",
+    "roles": [
+      {
+        "title": "Informatik",
+        "emoji": "\uD83D\uDDA5️",
+        "id": 501408401083990022
+      },
+      {
+        "title": "Mathe",
+        "emoji": "\uD83C\uDFB2",
+        "id": 501408370352455690
+      },
+      {
+        "title": "Wirtschaftsinformatik",
+        "emoji": "\uD83D\uDCB8",
+        "id": 816419211198070855
+      },
+      {
+        "title": "Sonstiges",
+        "id": 503261727526354973
+      }
+    ]
+  },
+  {
+    "topic": "Startsemester",
+    "ref": "startsem",
+    "roles": [
+      {
+        "title": "Langzeitstudent",
+        "id": 756553637903204492
+      },
+      {
+        "title": "WS 2016/2017",
+        "id": 756553572178460782
+      },
+      {
+        "title": "WS 2017/2018",
+        "id": 756553525198192840
+      },
+      {
+        "title": "WS 2018/2019",
+        "id": 756553491237044224
+      },
+      {
+        "title": "WS 2019/2020",
+        "id": 756553443862380675
+      },
+      {
+        "title": "WS 2020/2021",
+        "id": 756553386786291944
+      },
+      {
+        "title": "WS 2021/2022",
+        "id": 843482558544347136
+      }
+    ]
+  },
+  {
+    "topic": "O-Phasen-Gruppe",
+    "ref": "ophase",
+    "roles": [
+      {
+        "title": "202 Accepted",
+        "id": 608684966464978945
+      },
+      {
+        "title": "Arrrrr!",
+        "id": 501765655981457428
+      },
+      {
+        "title": "First Contact",
+        "id": 501371116745392159
+      },
+      {
+        "title": "FIT-Info",
+        "id": 501765776546725891
+      },
+      {
+        "title": "HiGHtech",
+        "id": 633304844622626886
+      },
+      {
+        "title": "Legendary",
+        "id": 608686822801014795
+      },
+      {
+        "title": "Lila Pause",
+        "id": 501739711740510221
+      },
+      {
+        "title": "Malibu",
+        "id": 633304796450914314
+      },
+      {
+        "title": "Pirates",
+        "id": 502532281055969282
+      },
+      {
+        "title": "Project π",
+        "id": 502031712025575424
+      },
+      {
+        "title": "Parti πple",
+        "id": 633304892987015178
+      },
+      {
+        "title": "Second Contact",
+        "id": 633305234701287442
+      },
+      {
+        "title": "Studier Langsam",
+        "id": 501371170579283978
+      },
+      {
+        "title": "Team Gecko",
+        "id": 762765617752178708
+      },
+      {
+        "title": "#kitinfo",
+        "id": 501765467959066644
+      }
+    ]
+  },
+  {
+    "topic": "Divers",
+    "ref": "div",
+    "roles": [
+      {
+        "title": "skribbl.io",
+        "id": 817115374998126663
+      },
+      {
+        "title": "Lernmodus",
+        "id": 821725348789092362
+      }
+    ]
+  }
+]

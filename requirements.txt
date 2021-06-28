@@ -1,3 +1,4 @@
-discord.py~=1.5.1
+discord.py==1.7.3
 python-dotenv~=0.15.0
 sqlalchemy~=1.4.13
+discord-components~=1.0.0

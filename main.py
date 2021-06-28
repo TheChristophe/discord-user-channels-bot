@@ -64,7 +64,9 @@ def main():
     load_dotenv()
     config: dict = parse_config_from_env()
 
-    client = Bot(config["command_prefix"])
+    intents = discord.Intents.default()
+    intents.members = True
+    client = Bot(config["command_prefix"], intents=intents)
 
     client.add_listener(on_command_error, "on_command_error")
 
@@ -74,6 +76,7 @@ def main():
     client.load_extension("chaos")
     client.load_extension("java_react")
     client.load_extension("tags")
+    client.load_extension("roles")
     client.run(config["token"])
 
 
