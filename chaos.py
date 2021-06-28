@@ -4,6 +4,8 @@ import discord
 from discord import Client
 import discord.ext.commands as commands
 
+from config import config
+
 
 async def _add_checkmark(ctx: Any):
     try:
@@ -24,7 +26,7 @@ async def _add_checkmark(ctx: Any):
 class Anarchy(commands.Cog):
     """Anarchy channel category where anyone may create, delete or edit channels."""
 
-    def __init__(self, client, config):
+    def __init__(self, client):
         self._client: Client = client
 
         self._server_id = config["server_id"]
@@ -325,6 +327,6 @@ def setup(bot):
     Args:
         bot (discord.Client) - The discord bot to attach to.
     """
-    anarchy: Anarchy = Anarchy(bot, bot._custom_config)
+    anarchy: Anarchy = Anarchy(bot)
     bot.add_cog(anarchy)
 

@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import command, Cog
 from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 
+from config import config
 from helpers import is_mod
 
 
@@ -18,7 +19,7 @@ class Roles(Cog):
 
     @commands.Cog.listener("on_ready")
     async def on_ready(self):
-        self.guild = self.bot.get_guild(self.bot._custom_config["server_id"])
+        self.guild = self.bot.get_guild(config["server_id"])
         if self.guild is None:
             raise RuntimeError("missing server id")
 

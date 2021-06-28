@@ -3,6 +3,7 @@ from typing import Any, Union
 from discord import Client, Emoji
 import discord.ext.commands as commands
 
+from config import config
 from database import Tag, session, DBSession
 
 from helpers import is_mod
@@ -11,11 +12,11 @@ from helpers import is_mod
 class Tags(commands.Cog):
     """Store user created tags/commands."""
 
-    def __init__(self, client, config):
+    def __init__(self, client):
         self._client: Client = client
         self._channel_ids = config["java_channels"]
 
-    @commands.command()  # name='!'
+    @commands.command()
     async def tag(self, ctx: Any, name: str):
         """"""
         with DBSession():
@@ -73,5 +74,5 @@ def setup(bot):
     Args:
         bot (discord.Client) - The discord bot to attach to.
     """
-    java_react: Tags = Tags(bot, bot._custom_config)
+    java_react: Tags = Tags(bot)
     bot.add_cog(java_react)

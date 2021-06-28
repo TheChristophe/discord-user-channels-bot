@@ -6,6 +6,8 @@ import discord.ext.commands as commands
 
 from random import randint
 
+from config import config
+
 
 async def _add_react(message: discord.Message, emoji="🤮"):
     try:
@@ -25,7 +27,7 @@ async def _add_react(message: discord.Message, emoji="🤮"):
 class JavaReact(commands.Cog):
     """Appropriate java reaction."""
 
-    def __init__(self, client, config):
+    def __init__(self, client):
         self._client: Client = client
 
         self._channel_ids = config["java_channels"]
@@ -49,5 +51,5 @@ def setup(bot):
     Args:
         bot (discord.Client) - The discord bot to attach to.
     """
-    java_react: JavaReact = JavaReact(bot, bot._custom_config)
+    java_react: JavaReact = JavaReact(bot)
     bot.add_cog(java_react)
