@@ -37,7 +37,6 @@ class Roles(Cog):
             if reference is not None:
                 if category["ref"] != reference:
                     continue
-            print(category["topic"], "body" in category, '"',category["topic"] + category["body"] if "body" in category else "", '"')
             await ctx.send(
                 category["topic"] + (category["body"] if "body" in category else ""),
                 components=[*split_if_necessary([*map(role_to_button, category["roles"])])],
