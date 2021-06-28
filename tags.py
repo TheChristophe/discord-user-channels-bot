@@ -3,14 +3,9 @@ from typing import Any, Union
 from discord import Client, Emoji
 import discord.ext.commands as commands
 
-from database import Tag, session, engine, DBSession
-from sqlalchemy.orm import Session
+from database import Tag, session, DBSession
 
-
-def is_mod():
-    async def predicate(ctx):
-        return ctx.guild.get_role(510218732698599445) in ctx.author.roles
-    return commands.check(predicate)
+from helpers import is_mod
 
 
 class Tags(commands.Cog):
