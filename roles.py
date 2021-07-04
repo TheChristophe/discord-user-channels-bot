@@ -70,7 +70,7 @@ class Roles(Cog):
             print("Error: {res.user.id} is not in the server!")
             return
 
-        if role in member.roles:
+        if next(filter(lambda x: x.id == role.id, member.roles), None) is not None:
             try:
                 await member.remove_roles(role)
             except Forbidden:
