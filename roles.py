@@ -25,7 +25,7 @@ class Roles(Cog):
 
     @command()
     @is_mod()
-    async def post_role_msg(self, ctx, reference: Optional[str] = None):
+    async def post_role_msg(self, ctx, reference: str):
         def role_to_button(role: dict) -> Button:
             if "emoji" in role:
                 return Button(style=ButtonStyle.grey, label=role["title"], id=str(role["id"]), emoji=role["emoji"])
@@ -34,14 +34,34 @@ class Roles(Cog):
         def split_if_necessary(l: list) -> list[list]:
             return [l[i:i+5] for i in range(0, len(l), 5)]
 
-        for category in self.roles:
-            if reference is not None:
-                if category["ref"] != reference:
-                    continue
+        if reference not in self.roles:
+            await ctx.send("Unknown reference given")
+            return
+
+        category = self.roles[reference]
+
+        response = ctx.message.reference
+        if response is None:
             await ctx.send(
                 category["topic"] + (category["body"] if "body" in category else ""),
-                components=[*split_if_necessary([*map(role_to_button, category["roles"])])],
+                components=[*split_if_necessary([*map(role_to_button, category["roles"])])]
             )
+            return
+        message = await ctx.fetch_message(response.message_id)
+        if message is None:
+            await ctx.message.channel.send("Could not load message being replied to.")
+            print("Failed to get referenced message")
+            return
+        await message.edit(
+            category["topic"] + (category["body"] if "body" in category else ""),
+            components=[*split_if_necessary([*map(role_to_button, category["roles"])])]
+        )
+
+    @command()
+    @is_mod()
+    async def reload_role_categories(self, ctx):
+        with open("roles.json") as file:
+            self.roles = json.loads(file.read())
 
     @Cog.listener()
     async def on_button_click(self, res):

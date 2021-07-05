@@ -1,7 +1,6 @@
-[
-  {
+{
+  "studien": {
     "topic": "Studiengang",
-    "ref": "studien",
     "roles": [
       {
         "title": "Informatik",
@@ -24,9 +23,8 @@
       }
     ]
   },
-  {
+  "startsem": {
     "topic": "Startsemester",
-    "ref": "startsem",
     "roles": [
       {
         "title": "Langzeitstudent",
@@ -58,9 +56,8 @@
       }
     ]
   },
-  {
+  "ophase": {
     "topic": "O-Phasen-Gruppe",
-    "ref": "ophase",
     "roles": [
       {
         "title": "202 Accepted",
@@ -124,9 +121,8 @@
       }
     ]
   },
-  {
+  "div": {
     "topic": "Divers",
-    "ref": "div",
     "roles": [
       {
         "title": "skribbl.io",
@@ -138,4 +134,4 @@
       }
     ]
   }
-]
+}
