@@ -36,7 +36,6 @@ def main():
     load_engine()
 
     client.load_extension("chaos")
-    client.load_extension("java_react")
     client.load_extension("tags")
     client.load_extension("roles")
     client.run(config["token"])
