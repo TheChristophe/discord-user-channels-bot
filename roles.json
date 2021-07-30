@@ -1,135 +1,156 @@
 {
   "studien": {
     "topic": "Studiengang",
-    "roles": [
-      {
+    "roles": [{
         "title": "Informatik",
-        "emoji": "\uD83D\uDDA5",
+        "emoji": "\ud83d\udda5\ufe0f",
         "id": 501408401083990022
       },
       {
         "title": "Mathe",
-        "emoji": "\uD83C\uDFB2",
+        "emoji": "\ud83c\udfb2",
         "id": 501408370352455690
       },
       {
         "title": "Wirtschaftsinformatik",
-        "emoji": "\uD83D\uDCB8",
+        "emoji": "\ud83d\udcb8",
         "id": 816419211198070855
       },
       {
         "title": "Sonstiges",
+        "emoji": "\ud83d\udc64",
         "id": 503261727526354973
       }
     ]
   },
   "startsem": {
     "topic": "Startsemester",
-    "roles": [
-      {
+    "roles": [{
         "title": "Langzeitstudent",
+        "emoji": "\ud83e\udd87",
         "id": 756553637903204492
       },
       {
         "title": "WS 2016/2017",
+        "emoji": "\ud83e\udd84",
         "id": 756553572178460782
       },
       {
         "title": "WS 2017/2018",
+        "emoji": "\ud83e\udd8b",
         "id": 756553525198192840
       },
       {
         "title": "WS 2018/2019",
+        "emoji": "\ud83d\udc26",
         "id": 756553491237044224
       },
       {
         "title": "WS 2019/2020",
+        "emoji": "\ud83d\udc27",
         "id": 756553443862380675
       },
       {
         "title": "WS 2020/2021",
+        "emoji": "\ud83e\udd89",
         "id": 756553386786291944
       },
       {
         "title": "WS 2021/2022",
+        "emoji": "\ud83d\udc1d",
         "id": 843482558544347136
       }
     ]
   },
   "ophase": {
     "topic": "O-Phasen-Gruppe",
-    "roles": [
-      {
+    "roles": [{
         "title": "202 Accepted",
+        "emoji": "\ud83d\udc31",
         "id": 608684966464978945
       },
       {
         "title": "Arrrrr!",
+        "emoji": "\ud83c\uddf7",
         "id": 501765655981457428
       },
       {
         "title": "First Contact",
+        "emoji": "\ud83d\udc7d",
         "id": 501371116745392159
       },
       {
         "title": "FIT-Info",
+        "emoji": "\ud83d\udeb5",
         "id": 501765776546725891
       },
       {
         "title": "HiGHtech",
+        "emoji": "\ud83c\udf43",
         "id": 633304844622626886
       },
       {
         "title": "Legendary",
+        "emoji": "\ud83c\udf7b",
         "id": 608686822801014795
       },
       {
         "title": "Lila Pause",
+        "emoji": "\ud83d\udc2e",
         "id": 501739711740510221
       },
       {
         "title": "Malibu",
+        "emoji": "\ud83c\udf78",
         "id": 633304796450914314
       },
       {
+        "title": "Parti πple",
+        "emoji": "\ud83c\udf8a",
+        "id": 633304892987015178
+      },
+      {
         "title": "Pirates",
+        "emoji": "\u26f5",
         "id": 502532281055969282
       },
       {
         "title": "Project π",
+        "emoji": "\ud83c\udf70",
         "id": 502031712025575424
       },
       {
-        "title": "Parti πple",
-        "id": 633304892987015178
-      },
-      {
         "title": "Second Contact",
+        "emoji": "\u0032\ufe0f\u20e3",
         "id": 633305234701287442
       },
       {
         "title": "Studier Langsam",
+        "emoji": "\ud83d\udc22",
         "id": 501371170579283978
       },
       {
         "title": "Team Gecko",
+        "emoji": "\ud83e\udd8e",
         "id": 762765617752178708
       },
       {
         "title": "#kitinfo",
+        "emoji": "\u0023\ufe0f\u20e3",
         "id": 501765467959066644
       }
     ]
   },
   "div": {
     "topic": "Divers",
-    "roles": [
-      {
+    "roles": [{
         "title": "skribbl.io",
+        "emoji": "\ud83c\udfa8",
         "id": 817115374998126663
       },
       {
         "title": "Lernmodus",
+        "emoji": "\ud83e\udeb6",
         "id": 821725348789092362
       }
     ]
