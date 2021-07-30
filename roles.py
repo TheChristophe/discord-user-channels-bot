@@ -1,5 +1,4 @@
 import json
-from typing import Optional
 
 from discord import Forbidden
 from discord.ext import commands
@@ -7,7 +6,7 @@ from discord.ext.commands import command, Cog
 from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 
 from config import config
-from helpers import is_mod
+from helpers import is_mod, make_button_list
 
 
 class Roles(Cog):
@@ -43,16 +42,6 @@ class Roles(Cog):
                 return Button(style=ButtonStyle.grey, label=role["title"], id=str(role["id"]), emoji=role["emoji"])
             return Button(style=ButtonStyle.grey, label=role["title"], id=str(role["id"]))
 
-        def split_if_necessary(l: list) -> list[list]:
-            """
-            If the list has more than 5 elements, split it into multiple lists of up to 5 elements.
-            Args:
-                l (list): List of button components
-            Returns:
-                list of lists of button components, each up to 5 elements
-            """
-            return [l[i:i + 5] for i in range(0, len(l), 5)]
-
         if reference not in self.roles:
             await ctx.send("Unknown reference given")
             return
@@ -63,7 +52,7 @@ class Roles(Cog):
         if response is None:
             await ctx.send(
                 category["topic"] + (category["body"] if "body" in category else ""),
-                components=[*split_if_necessary([*map(role_to_button, category["roles"])])]
+                components=[*make_button_list([*map(role_to_button, category["roles"])])]
             )
             return
         message = await ctx.fetch_message(response.message_id)
@@ -73,7 +62,7 @@ class Roles(Cog):
             return
         await message.edit(
             category["topic"] + (category["body"] if "body" in category else ""),
-            components=[*split_if_necessary([*map(role_to_button, category["roles"])])]
+            components=[*make_button_list([*map(role_to_button, category["roles"])])]
         )
 
     @command()
