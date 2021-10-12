@@ -26,10 +26,6 @@ def is_response():
     return commands.check(predicate)
 
 
-async def fetch_responded(ctx: Any) -> discord.Message:
-    return await ctx.fetch_message(ctx.message.reference.message_id)
-
-
 def make_button_list(buttons: list) -> list[list]:
     """
     If the list has more than 5 elements, split it into multiple lists of up to 5 elements.
