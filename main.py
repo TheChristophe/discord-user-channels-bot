@@ -4,7 +4,6 @@ from discord.ext import commands
 from discord.ext.commands import Bot
 
 from config import config
-from database import load_engine
 
 
 async def send_cmd_help(ctx):
@@ -32,8 +31,6 @@ def main():
     client = Bot(config["command_prefix"], intents=intents)
 
     client.add_listener(on_command_error, "on_command_error")
-
-    load_engine()
 
     client.load_extension("chaos")
     client.run(config["token"])
