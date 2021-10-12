@@ -37,7 +37,6 @@ def main():
 
     client.load_extension("chaos")
     client.load_extension("tags")
-    client.load_extension("roles")
     client.run(config["token"])
 
 
