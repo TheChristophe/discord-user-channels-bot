@@ -13,8 +13,6 @@ def parse_config_from_env() -> dict:
         raise ValueError("missing token")
     if "DISCORD_ANARCHY_CATEGORY" not in environ or len(environ["DISCORD_ANARCHY_CATEGORY"]) == 0:
         raise ValueError("missing anarchy category")
-    if "DISCORD_JAVA_REACT_WHERE" not in environ or len(environ["DISCORD_JAVA_REACT_WHERE"]) == 0:
-        raise ValueError("missing java channels")
 
     return {
         "server_id": int(environ["DISCORD_SERVER_ID"]),
@@ -29,8 +27,6 @@ def parse_config_from_env() -> dict:
             int(environ["DISCORD_ANON_LOG_CHANNEL"])
             if "DISCORD_ANON_LOG_CHANNEL" in environ and len(environ["DISCORD_ANON_LOG_CHANNEL"]) > 0
             else None,
-        "java_channels":
-            json.loads(environ["DISCORD_JAVA_REACT_WHERE"])
     }
 
 
