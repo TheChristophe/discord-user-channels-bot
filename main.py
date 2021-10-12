@@ -36,7 +36,6 @@ def main():
     load_engine()
 
     client.load_extension("chaos")
-    client.load_extension("tags")
     client.run(config["token"])
 
 
