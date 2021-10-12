@@ -26,7 +26,7 @@ def is_response():
     return commands.check(predicate)
 
 
-def fetch_responded(ctx: Any) -> discord.Message:
+async def fetch_responded(ctx: Any) -> discord.Message:
     return await ctx.fetch_message(ctx.message.reference.message_id)
 
 
